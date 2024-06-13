@@ -177,6 +177,10 @@ const config = {
 };
 
 /*
+  I use AI Generated code as a starting point for a few functions. All code is modified to fit the needs. There is very little AI code left.
+*/
+
+/*
   ChatGPT 3.5 Prompt:
 
   js join array with commas and "and" at the end
