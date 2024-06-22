@@ -213,6 +213,7 @@ const config = {
 let bell = new Audio("assets/bell.mp3");
 //let clock1 = new Audio('assets/tick-1.wav');
 //let clock2 = new Audio('assets/tick-2.mp3');
+let m = new Audio("assets/m.mp3");
 
 bell.addEventListener("canplaythrough", function () {
   let btn = document.querySelector("button#day-counter");
@@ -244,19 +245,23 @@ bell.addEventListener("canplaythrough", function () {
   });
 });
 
-const hand = document.getElementById("hand");
-const day = document.getElementById("day");
+const clock = document.querySelector("svg.clock");
+const hand = document.querySelector("#hand");
+const day = document.querySelector("#day");
 
 // https://easings.net/#easeOutCubic
 function easeOutCubic(x) {
   return 1 - Math.pow(1 - x, 3);
+}
+function easeInCubic(x) {
+  return Math.pow(1 - x, 3);
 }
 
 function interpolate(start, end, factor) {
   return start + (end - start) * factor;
 }
 
-function animateClock(start, end, duration, size) {
+function animateClock(start, end, duration) {
   const startTime = Date.now();
 
   //let lastValue = 0;
@@ -268,29 +273,34 @@ function animateClock(start, end, duration, size) {
     const easedFactor = easeOutCubic(factor);
     const currentValue = interpolate(start, end, easedFactor);
     const currentDay = Math.ceil(currentValue);
+    //console.log(currentValue, currentDay);
 
     /*if (lastValue !== currentDay) {
-			/*if (bool) {
-				clock1.volume = factor;
-				clock1.currentTime = 0;
-				clock1.play();
-			} else {
-				clock2.volume = factor;
-				clock2.currentTime = 0;
-				clock2.play();
-			};
-			bool = !bool;* /
-			console.log(lastValue, currentDay);
-			clock1.pause();
-			clock1.volume = factor;
-			clock1.currentTime = 0;
-			clock1.play();
-		
-			lastValue = currentDay;
-		};*/
+      /*if (bool) {
+        clock1.volume = factor;
+        clock1.currentTime = 0;
+        clock1.play();
+      } else {
+        clock2.volume = factor;
+        clock2.currentTime = 0;
+        clock2.play();
+      };
+      bool = !bool;* /
+      console.log(lastValue, currentDay);
+      clock1.pause();
+      clock1.volume = factor;
+      clock1.currentTime = 0;
+      clock1.play();
+
+      lastValue = currentDay;
+    };*/
 
     const angle = 360 * (currentValue / start);
-    hand.setAttribute("transform", `rotate(${angle} 0 0)`);
+    if (isFinite(angle)) {
+      hand.setAttribute("transform", `rotate(${angle} 0 0)`);
+    } else {
+      hand.remove();
+    }
     day.textContent = currentDay;
     day.style.setProperty("transform", `scale(${factor}) translateY(3px)`);
 
@@ -298,9 +308,37 @@ function animateClock(start, end, duration, size) {
       requestAnimationFrame(update);
     } else {
       day.textContent = end;
-    }
-
-    if (end === 0) {
+      if (end === 0) {
+        hand.style.setProperty("opacity", 0);
+        day.textContent = "";
+        setTimeout(function () {
+          m.play().then(function () {
+            let time1 = 1641,
+              time2 = 60668; /*, c = (time1 + time2), interval = c / 10;
+            let elapsed2 = 0;
+            let bool2 = false;
+            let i = setInterval(function() {
+              if (bool2) {
+                animateClock(0, 100, interval);
+              } else {
+                animateClock(100, 0, interval);
+              };
+              bool2 = !bool2;
+              elapsed2 += interval;
+              if (elapsed2 > c) {
+                clearInterval(i);
+              };
+            }, interval);*/
+            setTimeout(function () {
+              //animateClock(0, 100, 1500);
+              clock.classList.add("m");
+            }, time1);
+            setTimeout(function () {
+              clock.classList.remove("m");
+            }, time2);
+          });
+        }, 1500);
+      }
     }
   }
   update();
