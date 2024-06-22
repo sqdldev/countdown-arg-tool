@@ -65,6 +65,7 @@ const config = {
     /* 38 */ [112, 112, 100, 116, 98, 57, 67, 102, 83, 86, 48],
     /* 37 */ [72, 76, 65, 120, 45, 74, 98, 79, 83, 53, 89],
     /* 36 */ [82, 84, 114, 52, 49, 85, 115, 50, 100, 98, 65],
+    /* 35 */ [117, 97, 109, 55, 78, 56, 110, 88, 72, 106, 85],
   ],
   morseCode: [
     /* 100 */ "-",
@@ -132,6 +133,7 @@ const config = {
     /* 38 */ "-.",
     /* 37 */ "...-",
     /* 36 */ "-.",
+    /* 35 */ "-.",
   ],
   hexCode: [
     /* 100 */ "d3ceed",
@@ -199,6 +201,7 @@ const config = {
     /* 38 */ "bfbfd9",
     /* 37 */ "746165",
     /* 36 */ "534137",
+    /* 35 */ "1e180a",
   ],
   //lastUpdatedDate: createDate(5, 22, 2024, 3, 3, false),
 };
@@ -206,6 +209,102 @@ const config = {
 /*
   I use AI Generated code as a starting point for a few functions. All code is modified to fit the needs. There is very little AI code left.
 */
+
+let bell = new Audio("assets/bell.mp3");
+//let clock1 = new Audio('assets/tick-1.wav');
+//let clock2 = new Audio('assets/tick-2.mp3');
+
+bell.addEventListener("canplaythrough", function () {
+  let btn = document.querySelector("button#day-counter");
+  let clock = document.querySelector("div#clock-container");
+  btn.addEventListener("click", function () {
+    btn.animate(
+      [
+        {
+          opacity: 1,
+        },
+        {
+          opacity: 0,
+        },
+      ],
+      {
+        duration: 500,
+        fill: "forwards",
+      },
+    );
+    btn.disabled = true;
+    setTimeout(function () {
+      btn.remove();
+    }, 500);
+
+    clock.style.display = "block";
+    bell.play().then(function () {
+      animateClock(100, 100 - config.descriptions.length + 1, 6700, 25);
+    });
+  });
+});
+
+const hand = document.getElementById("hand");
+const day = document.getElementById("day");
+
+// https://easings.net/#easeOutCubic
+function easeOutCubic(x) {
+  return 1 - Math.pow(1 - x, 3);
+}
+
+function interpolate(start, end, factor) {
+  return start + (end - start) * factor;
+}
+
+function animateClock(start, end, duration, size) {
+  const startTime = Date.now();
+
+  //let lastValue = 0;
+  //let bool = false;
+
+  function update() {
+    const elapsed = Date.now() - startTime;
+    const factor = Math.min(elapsed / duration, 1);
+    const easedFactor = easeOutCubic(factor);
+    const currentValue = interpolate(start, end, easedFactor);
+    const currentDay = Math.ceil(currentValue);
+
+    /*if (lastValue !== currentDay) {
+			/*if (bool) {
+				clock1.volume = factor;
+				clock1.currentTime = 0;
+				clock1.play();
+			} else {
+				clock2.volume = factor;
+				clock2.currentTime = 0;
+				clock2.play();
+			};
+			bool = !bool;* /
+			console.log(lastValue, currentDay);
+			clock1.pause();
+			clock1.volume = factor;
+			clock1.currentTime = 0;
+			clock1.play();
+		
+			lastValue = currentDay;
+		};*/
+
+    const angle = 360 * (currentValue / start);
+    hand.setAttribute("transform", `rotate(${angle} 0 0)`);
+    day.textContent = currentDay;
+    day.style.setProperty("transform", `scale(${factor}) translateY(3px)`);
+
+    if (factor < 1) {
+      requestAnimationFrame(update);
+    } else {
+      day.textContent = end;
+    }
+
+    if (end === 0) {
+    }
+  }
+  update();
+}
 
 /*
   ChatGPT 3.5 Prompt:

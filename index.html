@@ -31,7 +31,16 @@
     <h1>Countdown ARG Tool</h1>
     <p class="mb-2">A set of tools to help solve Countdown ARG. I am back in the US, so expect this website to be updated on time. Please consider to <a href="https://youtube.com/@sqdldev" target="_blank">Subscribe my YouTube</a>, it is very appreciated!</p>
     <p>*GitHub takes 1-3 minutes to update my website, so please check back in a few minutes if the newest number is not out yet</p>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/BPryG4wQEk0?si=vvFXenYLMcPgb2WT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+	<div id="clock-anim">
+		<div id="clock-container">
+			<svg class="clock" viewBox="0 0 100 100">
+				<line id="hand" x1="50" y1="12" x2="50" y2="6" class="hand"/>
+				<text id="day" x="50" y="50" class="number">100</text>
+			</svg>
+		</div>
+		<button id="day-counter" class="btn btn-primary">What Day is it?</button>
+	</div>
+    <!--<iframe width="560" height="315" src="https://www.youtube.com/embed/BPryG4wQEk0?si=vvFXenYLMcPgb2WT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>-->
     <p id="updateDay"></p>
     <div class="ms-2 my-3">
       <h2>Description to URL</h2>
