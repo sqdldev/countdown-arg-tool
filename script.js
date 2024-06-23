@@ -238,9 +238,14 @@ bell.addEventListener("canplaythrough", function () {
       btn.remove();
     }, 500);
 
+    let dayNum = 100 - config.descriptions.length + 1;
     clock.style.display = "block";
     bell.play().then(function () {
-      animateClock(100, 100 - config.descriptions.length + 1, 6700, 25);
+      gtag("event", "c_user_see_current_day", {
+        day: dayNum,
+        unix: Date.now(),
+      });
+      animateClock(100, dayNum, 6700, 25);
     });
   });
 });
@@ -313,6 +318,11 @@ function animateClock(start, end, duration) {
         day.textContent = "";
         setTimeout(function () {
           m.play().then(function () {
+            gtag("event", "c_user_rr_start", {
+              day: currentDay,
+              unix: Date.now(),
+            });
+
             let time1 = 1641,
               time2 = 60668; /*, c = (time1 + time2), interval = c / 10;
             let elapsed2 = 0;
@@ -335,6 +345,10 @@ function animateClock(start, end, duration) {
             }, time1);
             setTimeout(function () {
               clock.classList.remove("m");
+              gtag("event", "c_user_rr_end", {
+                day: currentDay,
+                unix: Date.now(),
+              });
             }, time2);
           });
         }, 1500);
