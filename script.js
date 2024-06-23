@@ -443,6 +443,7 @@ function descToUrlUpdate() {
     descToUrlOut.innerText = "Invalid Input";
     return;
   }
+  console.log(split.join(", "));
   let link = descToUrlMakeLink(split);
   descToUrlOut.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
 }
