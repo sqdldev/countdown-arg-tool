@@ -318,13 +318,23 @@ function animateClock(start, end, duration) {
         day.textContent = "";
         setTimeout(function () {
           m.play().then(function () {
+            window.addEventListener("blur", function () {
+              if (!m.isDone) {
+                m.pause();
+              }
+            });
+            window.addEventListener("focus", function () {
+              if (!m.isDone) {
+                m.play();
+              }
+            });
             gtag("event", "c_user_rr_start", {
               day: currentDay,
               unix: Date.now(),
             });
 
-            let time1 = 1641,
-              time2 = 60668; /*, c = (time1 + time2), interval = c / 10;
+            let time1 = 1358,
+              time2 = 61000; /*, c = (time1 + time2), interval = c / 10;
             let elapsed2 = 0;
             let bool2 = false;
             let i = setInterval(function() {
@@ -342,14 +352,37 @@ function animateClock(start, end, duration) {
             setTimeout(function () {
               //animateClock(0, 100, 1500);
               clock.classList.add("m");
+
+              var iframe = document.createElement("iframe");
+              iframe.width = "560";
+              iframe.height = "315";
+              iframe.src = "https://www.youtube.com/embed/J-8WNC6vlyk";
+              iframe.frameBorder = "0";
+              iframe.referrerPolicy = "strict-origin-when-cross-origin";
+              iframe.allowFullscreen = true;
+
+              document.body.insertBefore(
+                iframe,
+                document.querySelector("p#updateDay"),
+              );
             }, time1);
-            setTimeout(function () {
+            /*setTimeout(function () {
               clock.classList.remove("m");
               gtag("event", "c_user_rr_end", {
                 day: currentDay,
                 unix: Date.now(),
               });
-            }, time2);
+            }, time2);*/
+            m.addEventListener("timeupdate", function () {
+              if (m.currentTime >= time2 / 1000) {
+                m.isDone = true;
+                clock.classList.remove("m");
+                gtag("event", "c_user_rr_end", {
+                  day: currentDay,
+                  unix: Date.now(),
+                });
+              }
+            });
           });
         }, 1500);
       }
