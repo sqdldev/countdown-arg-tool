@@ -69,6 +69,7 @@ const config = {
     /* 34 */ [88, 73, 85, 90, 52, 107, 100, 108, 97, 74, 48],
     /* 33 */ [97, 50, 90, 111, 77, 104, 101, 88, 70, 84, 115],
     /* 32 */ [85, 89, 50, 70, 104, 76, 114, 118, 73, 111, 115],
+    /* 31 */ [90, 83, 53, 113, 103, 75, 107, 55, 57, 45, 65],
   ],
   morseCode: [
     /* 100 */ "-",
@@ -140,6 +141,7 @@ const config = {
     /* 34 */ ".",
     /* 33 */ "---",
     /* 32 */ "-.",
+    /* 31 */ "-.",
   ],
   hexCode: [
     /* 100 */ "d3ceed",
@@ -211,6 +213,7 @@ const config = {
     /* 34 */ "c7c4e7",
     /* 33 */ "b7b4ce",
     /* 32 */ "c8c4d7",
+    /* 32 */ "a7a1ae",
   ],
   //lastUpdatedDate: createDate(5, 22, 2024, 3, 3, false),
 };
@@ -684,7 +687,7 @@ Never gonna tell a lie and hurt you`,
 
   spreadComment.value = `hidden message:
 current morse: (...) ${config.morseCode.join(" ").slice(-30)}
-current message: ${insertEveryNthChars(decodedMorse, ".", 31)}
+current message: (...) ${insertEveryNthChars(decodedMorse, ".", 31).slice(-30)}
 countdown arg tool (with unscrambled letters & predicted image) in description of the Countdown ARG Unlisted Videos playlist on my channel (Countdown blocked playlist links)`;
 } // of this playlist: https://www.youtube.com/playlist?list=PL5Y8yo2AZE3E-I5dKD8djw4v46wKOoWgG
 morseCodeUpdate();
