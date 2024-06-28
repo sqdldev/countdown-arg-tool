@@ -641,12 +641,18 @@ function fillLetters(fillPhrase, hexes, inputPhrase) {
     if (inputIndexOfChar > -1) {
       //console.log(letter, fillIndexOfChar, hexes[inputIndexOfChar]);
       output += `<span class="filled">${fillArrayCase[fillIndexOfChar]}</span>`;
-      otherHex.push(hexes[inputIndexOfChar]);
+      otherHex.push({
+        letter: letter,
+        hex: hexes[inputIndexOfChar],
+      });
       inputArray[inputIndexOfChar] = null;
     } else {
       output += `<span class="unfilled">${fillArrayCase[fillIndexOfChar]}</span>`;
       if (letter !== " " && !letter.includes("\r") && !letter.includes("\n")) {
-        otherHex.push("000000");
+        otherHex.push({
+          letter: letter,
+          hex: "00000000",
+        });
       }
     }
   });
@@ -715,13 +721,17 @@ function drawCanvasPixels(canvas, ctx, hexArray, width, height, vflip) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   canvas.width = width;
   canvas.height = height;
-  hexArray.forEach((hex, index) => {
-    if (hex.length === 6) {
-      hex = "#" + hex;
-      const x = index % width;
-      const y = Math.floor(index / width);
+  hexArray.forEach((obj, index) => {
+    if (obj.hex.length === 6 || obj.hex.length == 8) {
+      let hex = "#" + obj.hex;
+      const x = (index % (width / 100)) * 100;
+      const y = Math.floor(index / (width / 100)) * 100;
       ctx.fillStyle = hex;
-      ctx.fillRect(x, y, 1, 1);
+      ctx.fillRect(x, y, 100, 100);
+      ctx.font = "48px serif";
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "#ffffff";
+      ctx.fillText(obj.letter, x, y);
     } else {
       hex = "#000000";
     }
@@ -751,8 +761,8 @@ function videoHexCodesUpdate() {
 //videoHexCodesUpdate();
 videoHexCodes.addEventListener("input", videoHexCodesUpdate);
 function videoHexCodesOutDimensionsUpdate() {
-  videoHexCodesDimesion.x = parseInt(videoHexCodesOutWidth.value);
-  videoHexCodesDimesion.y = parseInt(videoHexCodesOutHeight.value);
+  videoHexCodesDimesion.x = parseInt(videoHexCodesOutWidth.value) * 100;
+  videoHexCodesDimesion.y = parseInt(videoHexCodesOutHeight.value) * 100;
   videoHexCodesDimesion.vflip = videoHexCodesOutVFlip.checked;
   videoHexCodesOutWidthLabel.innerText = "Width: " + videoHexCodesDimesion.x;
   videoHexCodesOutHeightLabel.innerText = "Height: " + videoHexCodesDimesion.y;
